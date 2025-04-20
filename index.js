@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
+const { swaggerSpecV1 } = require('./app/config/swagger');
 const { PORT, ALLOWED_ORIGINS } = require('./app/config/env');
 // END OF STANDARD IMPORTS //
 
@@ -31,7 +32,7 @@ const corsOptions = {
 // MIDDLEWARES //
 app.use( cors( corsOptions ) );
 app.use( express.json() );
-// app.use( '/api/api-docs', swaggerUi.serve, swaggerUi.setup( swaggerSpecV1 ) );
+app.use( '/api/api-docs', swaggerUi.serve, swaggerUi.setup( swaggerSpecV1 ) );
 // END OF MIDDLEWARES //
 
 // TEST ROUTES //
