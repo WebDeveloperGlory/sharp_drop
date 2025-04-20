@@ -4,10 +4,10 @@ const bcrypt = require('bcrypt');
 const userSchema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, required: true },
-    number: { type: String, required: true },
+    email: { type: String, unique: true, required: true },
+    number: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    securityPin: { type: String, required: true },
+    securityPin: { type: String },
     role: {
         type: String,
         enum: [ 'superAdmin', 'admin', 'user' ],
