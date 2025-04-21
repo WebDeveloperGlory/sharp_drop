@@ -79,4 +79,17 @@ exports.loginAdmin = async ( req, res ) => {
     }
 }
 
+exports.logoutUser = async ( req, res ) => {
+    try {
+        const result = await authService.logoutUser( req.user );
+
+        if( result.success ) {
+            return success( res, result.message, result.data, 201 );
+        }
+        return error( res, result.message );    
+    } catch ( err ) {
+        return serverError( res, err );
+    }
+}
+
 module.exports = exports;

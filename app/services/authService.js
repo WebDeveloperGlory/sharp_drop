@@ -109,6 +109,10 @@ exports.loginUser = async ({ email, number, password }) => {
     const isPasswordMatch = await foundUser.comparePassword( password );
     if( !isPasswordMatch ) return { success: false, message: 'Invalid Password' };
 
+    // Set user as online
+    foundUser.isOnline = true;
+    await foundUser.save();
+
     // Generate jwt
     const token = generateToken( foundUser );
 
@@ -131,11 +135,29 @@ exports.loginAdmin = async ({ email, number, password }) => {
     const isPasswordMatch = await foundUser.comparePassword( password );
     if( !isPasswordMatch ) return { success: false, message: 'Invalid Password' };
 
+    // Set user as online
+    foundUser.isOnline = true;
+    await foundUser.save();
+
     // Generate jwt
     const token = generateToken( foundUser );
 
     // Return success
     return { success: true, message: 'Admin Logged In', data: token };
+}
+
+exports.logoutUser = async ({ userId }) => {
+    // Check if user exists
+    const foundUser = await db.User.findById( userId ).select('-password -securityPin');
+    if( !foundUser ) return { success: false, message: 'Invalid User' }
+
+    // Update online status
+    foundUser.isOnline = false;
+    foundUser.lastSeen = Date.now();
+    await foundUser.save();
+
+    // Return success
+    return { success: true, message: 'User Logged Out', data: null }
 }
 
 module.exports = exports;

@@ -11,6 +11,7 @@ router.post( '/login/user', controller.loginUser );
 
 // GENERAL ROUTES //
 router.post( '/register/security', controller.setSecurityPin );
+router.post( '/logout', authenticateUser, controller.logoutUser );
 // END OF GENERAL ROUTES //
 
 // ADMIN ROUTES //

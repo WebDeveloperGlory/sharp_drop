@@ -198,6 +198,61 @@
 
 /**
  * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     tags: [Authentication (General)]
+ *     summary: Logout a user
+ *     description: Logs out the authenticated user by setting their online status to false and updating last seen timestamp
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User logged out successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "00"
+ *                 message:
+ *                   type: string
+ *                   example: "User Logged Out"
+ *                 data:
+ *                   type: null
+ *       401:
+ *         description: Unauthorized (invalid or missing token)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *       400:
+ *         description: Bad request (invalid user)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "99"
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid User"
+ *     securitySchemes:
+ *       bearerAuth:
+ *         type: http
+ *         scheme: bearer
+ *         bearerFormat: JWT
+ */
+
+/**
+ * @swagger
  * /auth/register/admin:
  *   post:
  *     tags: [Authentication (Admin)]
