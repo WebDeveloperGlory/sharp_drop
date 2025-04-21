@@ -45,7 +45,7 @@ exports.setSecurityPin = async ( req, res ) => {
         const result = await authService.setSecurityPin( req.body );
 
         if( result.success ) {
-            return success( res, result.message, result.data, 201 );
+            return success( res, result.message, result.data );
         }
         return error( res, result.message );    
     } catch ( err ) {
@@ -58,7 +58,7 @@ exports.loginUser = async ( req, res ) => {
         const result = await authService.loginUser( req.body );
 
         if( result.success ) {
-            return success( res, result.message, result.data, 201 );
+            return success( res, result.message, result.data );
         }
         return error( res, result.message );    
     } catch ( err ) {
@@ -71,7 +71,7 @@ exports.loginAdmin = async ( req, res ) => {
         const result = await authService.loginAdmin( req.body );
 
         if( result.success ) {
-            return success( res, result.message, result.data, 201 );
+            return success( res, result.message, result.data );
         }
         return error( res, result.message );    
     } catch ( err ) {
@@ -84,7 +84,7 @@ exports.logoutUser = async ( req, res ) => {
         const result = await authService.logoutUser( req.user );
 
         if( result.success ) {
-            return success( res, result.message, result.data, 201 );
+            return success( res, result.message, result.data );
         }
         return error( res, result.message );    
     } catch ( err ) {
