@@ -8,6 +8,8 @@ const { PORT, ALLOWED_ORIGINS } = require('./app/config/env');
 
 // ROUTE IMPORTS //
 const authRoutes = require('./app/routes/authRoutes');
+const channelRoutes = require('./app/routes/channelRoutes');
+const userRoutes = require('./app/routes/userRoutes');
 // END OF ROUTE IMPORTS //
 
 // APP SETUP //
@@ -43,6 +45,8 @@ app.get( '/', ( req, res ) => {
 
 // ROUTES //
 app.use('/api/auth', authRoutes);
+app.use('/api/channel', channelRoutes);
+app.use('/api/user', userRoutes);
 // END OF ROUTES //
 
 // SERVER STARTUP //
