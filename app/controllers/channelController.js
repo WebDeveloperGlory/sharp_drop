@@ -19,7 +19,7 @@ exports.createChannel = async ( req, res ) => {
         const result = await channelService.createChannel( req.body, req.user );
 
         if( result.success ) {
-            return success( res, result.message, result.data );
+            return success( res, result.message, result.data, 201 );
         }
         return error( res, result.message );    
     } catch ( err ) {
