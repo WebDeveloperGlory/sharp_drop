@@ -7,7 +7,7 @@ const { PORT, ALLOWED_ORIGINS } = require('./app/config/env');
 // END OF STANDARD IMPORTS //
 
 // ROUTE IMPORTS //
-
+const authRoutes = require('./app/routes/authRoutes');
 // END OF ROUTE IMPORTS //
 
 // APP SETUP //
@@ -42,7 +42,7 @@ app.get( '/', ( req, res ) => {
 // END OF TEST ROUTES //
 
 // ROUTES //
-
+app.use('/api/auth', authRoutes);
 // END OF ROUTES //
 
 // SERVER STARTUP //
