@@ -12,7 +12,11 @@ const userSchema = new Schema({
         type: String,
         enum: [ 'superAdmin', 'admin', 'user' ],
         default: 'user'
-    }
+    },
+    isOnline: { type: Boolean, default: false },
+    lastSeen: { type: Date, default: Date.now },
+}, {
+    timestamps: true
 });
 
 userSchema.pre('save', async function ( next ) {
