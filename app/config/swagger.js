@@ -16,7 +16,7 @@ const swaggerDefinitionV1 = JSON.parse(JSON.stringify({
       description: 'Local Development server',
     },
     {
-      url: `https://friendly-inc.onrender.com/api`,
+      url: `https://sharp-drop.onrender.com/api`,
       description: 'Production server',
     },
   ],
