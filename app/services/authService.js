@@ -9,9 +9,14 @@ exports.registerUser = async ({ firstName, lastName, email, number, password }) 
     const foundUser = await db.User.findOne({ email });
     if( foundUser ) return { success: false, message: 'User With Email Already Exists' }
 
-    // Create user
-    const createdUser = await db.User.create({ firstName, lastName, email, number, password });
-    if( !createdUser ) return { success: false, message: 'Error Creating User' };
+    try {
+        // Create user
+        const createdUser = await db.User.create({ firstName, lastName, email, number, password });
+        if( !createdUser ) return { success: false, message: 'Error Creating User' };
+    } catch ( error) {
+        console.error('User creation failed:', err);
+        return { success: false, message: 'Error Creating User', error: err.message };
+    }
 
     // Grab fields
     const registeredUser = {

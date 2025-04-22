@@ -20,21 +20,25 @@ const userSchema = new Schema({
 });
 
 userSchema.pre('save', async function ( next ) {
-    const user = this;
+    try {
+        const user = this;
 
-    // Hash password
-    if( user.isModified('password') ) {
-        const salt = await bcrypt.genSalt( 10 );
-        user.password = await bcrypt.hash( user.password, salt );
+        // Hash password
+        if( user.isModified('password') ) {
+            const salt = await bcrypt.genSalt( 10 );
+            user.password = await bcrypt.hash( user.password, salt );
+        }
+    
+        // Hash security pin
+        if( user.isModified('securityPin') ) {
+            const salt = await bcrypt.genSalt( 10 );
+            user.securityPin = await bcrypt.hash( user.securityPin, salt );
+        }
+    
+        next();    
+    } catch  ( error ) {
+        return next( error );
     }
-
-    // Hash security pin
-    if( user.isModified('securityPin') ) {
-        const salt = await bcrypt.genSalt( 10 );
-        user.securityPin = await bcrypt.hash( user.securityPin, salt );
-    }
-
-    next();
 });
 
 userSchema.methods.comparePassword = async function( candidatePassword ) {
