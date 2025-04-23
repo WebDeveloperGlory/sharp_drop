@@ -14,4 +14,43 @@ exports.getUserProfile = async ( req, res ) => {
     }
 }
 
+exports.generateReferralCode = async ( req, res ) => {
+    try {
+        const result = await userService.generateReferralCode( req.user );
+
+        if( result.success ) {
+            return success( res, result.message, result.data );
+        }
+        return error( res, result.message );    
+    } catch ( err ) {
+        return serverError( res, err );
+    }
+}
+
+exports.validateReferralCode = async ( req, res ) => {
+    try {
+        const result = await userService.validateReferralCode( req.params );
+
+        if( result.success ) {
+            return success( res, result.message, result.data );
+        }
+        return error( res, result.message );    
+    } catch ( err ) {
+        return serverError( res, err );
+    }
+}
+
+exports.getUserReferrals = async ( req, res ) => {
+    try {
+        const result = await userService.getUserReferrals( req.user );
+
+        if( result.success ) {
+            return success( res, result.message, result.data );
+        }
+        return error( res, result.message );    
+    } catch ( err ) {
+        return serverError( res, err );
+    }
+}
+
 module.exports = exports;

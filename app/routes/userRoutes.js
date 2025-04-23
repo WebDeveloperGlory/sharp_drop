@@ -5,7 +5,10 @@ const { authenticateUser } = require('../middlewares/authMiddlewares');
 const router = Router();
 
 // GENERAL ROUTES //
-router.post( '/profile', authenticateUser, controller.getUserProfile );
+router.get( '/profile', authenticateUser, controller.getUserProfile );
+router.get( '/referrals/personal', authenticateUser, controller.getUserReferrals );
+router.post( '/referrals/generate', authenticateUser, controller.generateReferralCode );
+router.post( '/referrals/validate/:referralCode', controller.validateReferralCode );
 // END OF GENERAL ROUTES //
 
 module.exports = router;

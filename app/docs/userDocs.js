@@ -65,7 +65,7 @@
 /**
  * @swagger
  * /user/profile:
- *   post:
+ *   get:
  *     tags: [User]
  *     summary: Get user profile
  *     description: Retrieve authenticated user's profile details (excluding sensitive information like password and security pin)
