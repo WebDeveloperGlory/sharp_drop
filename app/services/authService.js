@@ -1,7 +1,8 @@
 const db = require('../config/db');
 const { generateToken } = require('../utils/jwtUtils');
+const { processReferral } = require('../utils/referralUtils');
 
-exports.registerUser = async ({ firstName, lastName, email, number, password }) => {
+exports.registerUser = async ({ firstName, lastName, email, number, password, referralCode }) => {
     // Check if required fields passed in
     if( !firstName || !lastName || !email || !number || !password ) return { success: false, message: 'Missing Required Fields' }
     
@@ -9,13 +10,20 @@ exports.registerUser = async ({ firstName, lastName, email, number, password }) 
     const foundUser = await db.User.findOne({ email });
     if( foundUser ) return { success: false, message: 'User With Email Already Exists' }
 
+    let createdUser;
     try {
         // Create user
-        const createdUser = await db.User.create({ firstName, lastName, email, number, password });
+        createdUser = new db.User({ firstName, lastName, email, number, password });
         if( !createdUser ) return { success: false, message: 'Error Creating User' };
+        await createdUser.save();
     } catch ( error) {
         console.error('User creation failed:', err);
         return { success: false, message: 'Error Creating User', error: err.message };
+    }
+
+    if( referralCode ) {
+        const referralResult = await processReferral({ referralCode, userId: createdUser._id });
+        if( !referralResult.success ) console.warn('Referral processing failed', referralResult.message );
     }
 
     // Grab fields

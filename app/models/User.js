@@ -13,6 +13,8 @@ const userSchema = new Schema({
         enum: [ 'superAdmin', 'admin', 'user' ],
         default: 'user'
     },
+    referralCode: { type: String, default: null },
+    referredBy: { type: Schema.Types.ObjectId, ref: 'User' },
     isOnline: { type: Boolean, default: false },
     lastSeen: { type: Date, default: Date.now },
 }, {
