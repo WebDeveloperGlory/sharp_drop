@@ -30,6 +30,8 @@ exports.generateReferralCode = async ({ userId }) => {
 
     // Generate referral code
     const referralCode = await generateUniqueReferralCode();
+    foundUser.referralCode = referralCode;
+    await foundUser.save();
 
     // Return success
     return { success: true, message: 'Referral Code Generated', data: referralCode }
