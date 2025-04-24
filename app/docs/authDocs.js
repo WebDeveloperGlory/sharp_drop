@@ -42,6 +42,9 @@
  *               password:
  *                 type: string
  *                 format: password
+ *               referralCode:
+ *                 type: string
+ *                 description: optional referral code
  *     responses:
  *       201:
  *         description: User registered successfully
