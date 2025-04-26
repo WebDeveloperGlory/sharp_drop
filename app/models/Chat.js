@@ -3,7 +3,7 @@ const { Schema, default: mongoose } = require('mongoose');
 const chatSchema = new Schema({
     channel: { type: Schema.Types.ObjectId, ref: 'Channel', required: true },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    admin: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    admin: { type: Schema.Types.ObjectId, ref: 'User' },
     lastMessage: { type: Schema.Types.ObjectId, ref: 'Message' },
     messages: [{ 
         type: Schema.Types.ObjectId,

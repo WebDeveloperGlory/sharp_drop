@@ -8,7 +8,7 @@ const router = Router();
 router.post( '/text', authenticateUser, controller.sendTextMessage );
 router.post( '/image', authenticateUser, controller.sendImageMessage );
 router.post( '/video', authenticateUser, controller.sendVideoMessage );
-router.post( '/:chatId/read', authenticateUser, controller.markAsRead );
+router.put( '/:chatId/read', authenticateUser, controller.markAsRead );
 // END OF GENERAL ROUTES //
 
 module.exports = router;

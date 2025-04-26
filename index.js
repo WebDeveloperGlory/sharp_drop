@@ -11,6 +11,7 @@ const authRoutes = require('./app/routes/authRoutes');
 const channelRoutes = require('./app/routes/channelRoutes');
 const userRoutes = require('./app/routes/userRoutes');
 const messageRoutes = require('./app/routes/messageRoutes');
+const chatRoutes = require('./app/routes/chatRoutes');
 // END OF ROUTE IMPORTS //
 
 // APP SETUP //
@@ -49,6 +50,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/channel', channelRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/message', messageRoutes);
+app.use('/api/chat', chatRoutes);
 // END OF ROUTES //
 
 // SERVER STARTUP //
