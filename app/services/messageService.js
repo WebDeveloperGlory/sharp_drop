@@ -24,7 +24,7 @@ exports.sendMessage = async ({ chatId, senderId, content, type = 'text' }) => {
     return { success: true, message: 'Message Sent', data: message }
 }
 
-exports.markAsRead = async ({ chatId, userId }) => {
+exports.markAsRead = async ({ chatId }, { userId }) => {
     await db.Chat.findByIdAndUpdate( chatId, { unreadCount: 0 } );
     // this.socket.to(chatId.toString()).emit('messages_read', { chatId, userId });
 
