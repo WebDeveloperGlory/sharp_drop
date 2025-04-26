@@ -45,7 +45,29 @@ exports.userGetChatDetails = async ({ channelId }, { userId }) => {
 }
 
 exports.adminGetAllChats = async () => {
-    
+    // Get all chats and sort by channel
+    const allChats = await db.Chat.find()
+        .populate([
+            {
+                path: 'channel',
+                select: 'name color',
+            },
+            {
+                path: 'user',
+                select: 'number email',
+            },
+            {
+                path: 'lastMessage',
+                select: 'sender content type createdAt',
+                populate: {
+                    path: 'sender',
+                    select: 'number email',
+                }
+            },
+        ]);
+
+    // Return success
+    return { success: true, message: 'All Chats', data: allChats };
 }
 
 exports.startChat = async ({ channelId }, { userId }) => {
@@ -77,7 +99,7 @@ exports.startChat = async ({ channelId }, { userId }) => {
     return { success: true, message: 'Chat Started', data: newChat };
 }
 
-exports.joinChat = async ({ chatId }, { userId }) => {
+exports.adminJoinChat = async ({ chatId }, { userId }) => {
     // Check if chatId is valid
     const foundChat = await db.Chat.findOne({ 
         _id: chatId,
@@ -94,6 +116,25 @@ exports.joinChat = async ({ chatId }, { userId }) => {
 
     // Return success
     return { success: true, message: 'Admin Joined Chat', data: foundChat };
+}
+
+exports.adminLeaveChat = async ({ chatId }, { userId }) => {
+    // Check if chatId is valid
+    const foundChat = await db.Chat.findOne({ 
+        _id: chatId,
+        isActive: true
+    });
+    if( !foundChat ) return { success: false, message: 'Invalid/Inactive Chat' };
+
+    // Check if user is in chat
+    if( foundChat.admin.toString() !== userId.toString() ) return { success: false, message: 'Not Authorized' };
+
+    // Remove user from chat
+    foundChat.admin = null;
+    await foundChat.save();
+
+    // Return success
+    return { success: true, message: 'Admin Left Chat', data: foundChat };
 }
 
 exports.setChatAsInactive = async ({ chatId }, { userId }) => {
@@ -113,3 +154,38 @@ exports.setChatAsInactive = async ({ chatId }, { userId }) => {
     // Return success
     return { success: true, message: 'Chat Set As Inactive', data: foundChat };
 }
+
+exports.adminGetChatMessages = async ({ chatId }, { userId }) => {
+    // Check if chatId is valid
+    const foundChat = await db.Chat.findOne({ 
+        _id: chatId,
+        isActive: true
+    });
+    if( !foundChat ) return { success: false, message: 'Invalid/Inactive Chat' };
+
+    // Get chat messages
+    const chatMessages = await db.Message.find({ chat: chatId })
+        .populate([
+            {
+                path: 'lastMessage',
+                select: 'sender content type createdAt',
+                populate: {
+                    path: 'sender',
+                    select: 'number email',
+                }
+            },
+            {
+                path: 'messages',
+                select: 'sender content media type createdAt',
+                populate: {
+                    path: 'sender',
+                    select: 'number email',
+                }
+            }
+        ]);
+
+    // Return success
+    return { success: true, message: 'Chat Details', data: chatMessages };
+}
+
+module.exports = exports;
