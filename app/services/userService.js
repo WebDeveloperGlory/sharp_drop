@@ -3,7 +3,7 @@ const { generateUniqueReferralCode } = require('../utils/referralUtils');
 
 exports.getUserProfile = async ({ userId }) => {
     // Check if user exists
-    const foundUser = await db.User.findById( userId ).select('-password -securityPin').lean();
+    const foundUser = await db.User.findById( userId ).populate({ path: 'referredBy', select: 'email' }).select('-password -securityPin').lean();
     if( !foundUser ) return { success: false, message: 'Invalid User' };
 
     // Get number of user referrals
