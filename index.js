@@ -10,6 +10,7 @@ const { PORT, ALLOWED_ORIGINS } = require('./app/config/env');
 const authRoutes = require('./app/routes/authRoutes');
 const channelRoutes = require('./app/routes/channelRoutes');
 const userRoutes = require('./app/routes/userRoutes');
+const messageRoutes = require('./app/routes/messageRoutes');
 // END OF ROUTE IMPORTS //
 
 // APP SETUP //
@@ -47,6 +48,7 @@ app.get( '/', ( req, res ) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/channel', channelRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/message', messageRoutes);
 // END OF ROUTES //
 
 // SERVER STARTUP //
