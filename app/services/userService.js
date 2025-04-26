@@ -3,7 +3,7 @@ const { generateUniqueReferralCode } = require('../utils/referralUtils');
 
 exports.getUserProfile = async ({ userId }) => {
     // Check if user exists
-    const foundUser = await db.User.findById( userId ).select('-password -securityPin');
+    const foundUser = await db.User.findById( userId ).select('-password -securityPin').lean();
     if( !foundUser ) return { success: false, message: 'Invalid User' };
 
     // Get number of user referrals
@@ -30,6 +30,8 @@ exports.generateReferralCode = async ({ userId }) => {
 
     // Generate referral code
     const referralCode = await generateUniqueReferralCode();
+    foundUser.referralCode = referralCode;
+    await foundUser.save();
 
     // Return success
     return { success: true, message: 'Referral Code Generated', data: referralCode }
