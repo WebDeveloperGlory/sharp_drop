@@ -6,7 +6,7 @@ exports.sendTextMessage = async ( req, res ) => {
     const senderId = req.user.userId;
 
     try {
-        const result = await messageService.sendMessage({ chatId, content, senderId });
+        const result = await messageService.sendMessage({ chatId, content, senderId }, req.user );
 
         if( result.success ) {
             return success( res, result.message, result.data, 201 );
@@ -23,7 +23,7 @@ exports.sendImageMessage = async ( req, res ) => {
     const senderId = req.user.userId;
 
     try {
-        const result = await messageService.sendImageMessage({ chatId, imageFile, senderId });
+        const result = await messageService.sendImageMessage({ chatId, imageFile, senderId }, req.user );
 
         if( result.success ) {
             return success( res, result.message, result.data, 201 );
@@ -40,7 +40,7 @@ exports.sendVideoMessage = async ( req, res ) => {
     const senderId = req.user.userId;
 
     try {
-        const result = await messageService.sendVideoMessage({ chatId, videoFile, senderId });
+        const result = await messageService.sendVideoMessage({ chatId, videoFile, senderId }, req.user );
 
         if( result.success ) {
             return success( res, result.message, result.data, 201 );

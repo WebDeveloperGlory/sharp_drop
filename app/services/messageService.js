@@ -1,7 +1,7 @@
 const db = require('../config/db');
 const { uploadMedia } = require('./mediaProcessingService');
 
-exports.sendMessage = async ({ chatId, senderId, content, type = 'text' }) => {
+exports.sendMessage = async ({ chatId, senderId, content, type = 'text' }, { role }) => {
     // Create message
     const message = new db.Message({
         chat: chatId,
@@ -15,7 +15,9 @@ exports.sendMessage = async ({ chatId, senderId, content, type = 'text' }) => {
     await db.Chat.findByIdAndUpdate(chatId, {
         lastMessage: message._id,
         $push: { messages: message._id },
-        $inc: { unreadCount: 1 }
+        $inc: { unreadCount: 1 },
+        $inc: { userUnreadCount: role === 'user' ? 1 : 0 },
+        $inc: { adminUnreadCount: role === 'admin' || 'superAdmin' ? 1 : 0 },
     });
 
     // Emit the message via Socket.IO
@@ -32,7 +34,7 @@ exports.markAsRead = async ({ chatId }, { userId }) => {
     return { success: true, message: 'Chat Marked As Read', data: null }
 }
 
-exports.sendVideoMessage = async ({ chatId, senderId, videoFile }) => {
+exports.sendVideoMessage = async ({ chatId, senderId, videoFile }, { role }) => {
     // Upload to Cloudinary - it will handle all processing
     const mediaInfo = await uploadMedia(videoFile.path, 'video', {
         folder: 'chat_videos',
@@ -63,7 +65,9 @@ exports.sendVideoMessage = async ({ chatId, senderId, videoFile }) => {
     await db.Chat.findByIdAndUpdate(chatId, {
         lastMessage: message._id,
         $push: { messages: message._id },
-        $inc: { unreadCount: 1 }
+        $inc: { unreadCount: 1 },
+        $inc: { userUnreadCount: role === 'user' ? 1 : 0 },
+        $inc: { adminUnreadCount: role === 'admin' || 'superAdmin' ? 1 : 0 },
     });
 
     // Emit via Socket.IO
@@ -73,7 +77,7 @@ exports.sendVideoMessage = async ({ chatId, senderId, videoFile }) => {
     return { success: true, message: 'Video Sent', data: message }
 }
 
-exports.sendImageMessage = async ({ chatId, senderId, imageFile }) => {
+exports.sendImageMessage = async ({ chatId, senderId, imageFile }, { role }) => {
     // Upload to Cloudinary
     const mediaInfo = await uploadMedia(imageFile.path, 'image', {
         folder: 'chat_images',
@@ -100,7 +104,9 @@ exports.sendImageMessage = async ({ chatId, senderId, imageFile }) => {
     await db.Chat.findByIdAndUpdate(chatId, {
         lastMessage: message._id,
         $push: { messages: message._id },
-        $inc: { unreadCount: 1 }
+        $inc: { unreadCount: 1 },
+        $inc: { userUnreadCount: role === 'user' ? 1 : 0 },
+        $inc: { adminUnreadCount: role === 'admin' || 'superAdmin' ? 1 : 0 },
     });
 
     // Emit via Socket.IO
