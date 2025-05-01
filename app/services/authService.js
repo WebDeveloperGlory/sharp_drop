@@ -30,7 +30,8 @@ exports.registerUser = async ({ firstName, lastName, email, number, password, re
     const registeredUser = {
         id: createdUser._id,
         firstName, lastName, email, number,
-        role: createdUser.role
+        role: createdUser.role,
+        referralCode: createdUser.referralCode
     }
     
     // Return success

@@ -1,5 +1,6 @@
 const { Schema, default: mongoose } = require('mongoose');
 const bcrypt = require('bcrypt');
+const { generateUniqueReferralCode } = require('../utils/referralUtils');
 
 const userSchema = new Schema({
     firstName: { type: String, required: true },
@@ -13,7 +14,7 @@ const userSchema = new Schema({
         enum: [ 'superAdmin', 'admin', 'user' ],
         default: 'user'
     },
-    referralCode: { type: String, default: null },
+    referralCode: { type: String, unique: true, default: null },
     referredBy: { type: Schema.Types.ObjectId, ref: 'User' },
     isOnline: { type: Boolean, default: false },
     lastSeen: { type: Date, default: Date.now },
@@ -35,6 +36,11 @@ userSchema.pre('save', async function ( next ) {
         if( user.isModified('securityPin') ) {
             const salt = await bcrypt.genSalt( 10 );
             user.securityPin = await bcrypt.hash( user.securityPin, salt );
+        }
+
+        // Generate referral code for new users
+        if (user.isNew && !user.referralCode) {
+            user.referralCode = await generateUniqueReferralCode();
         }
     
         next();    

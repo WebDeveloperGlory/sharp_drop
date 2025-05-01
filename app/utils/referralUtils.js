@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-const REFERRAL_CHARS = 'abcdefghijklmnopqrstuvwxyz';
+const REFERRAL_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 const REFERRAL_CODE_LENGTH = 8;
 const MAX_REFERRAL_TRIES = 10;
 
