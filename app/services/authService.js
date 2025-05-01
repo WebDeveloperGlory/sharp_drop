@@ -10,17 +10,11 @@ exports.registerUser = async ({ firstName, lastName, email, number, password, re
     const foundUser = await db.User.findOne({ email });
     if( foundUser ) return { success: false, message: 'User With Email Already Exists' }
 
-    let createdUser;
-    try {
-        // Create user
-        createdUser = new db.User({ firstName, lastName, email, number, password });
-        if( !createdUser ) return { success: false, message: 'Error Creating User' };
-        await createdUser.save();
-    } catch ( err ) {
-        console.error('User creation failed:', err);
-        return { success: false, message: 'Error Creating User', error: err.message };
-    }
+    // Create user
+    const createdUser = new db.User({ firstName, lastName, email, number, password });
+    await createdUser.save();
 
+    // Check if referral code is passed in
     if( referralCode ) {
         const referralResult = await processReferral({ referralCode, userId: createdUser._id });
         if( !referralResult.success ) console.warn('Referral processing failed', referralResult.message );
