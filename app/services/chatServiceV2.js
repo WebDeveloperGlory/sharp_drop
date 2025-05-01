@@ -89,7 +89,7 @@ exports.userChannelClick = async ({ channelId }, { userId }) => {
     }
 
     // Mark as read for admin
-    await db.Chat.findByOneAndUpdate(
+    await db.Chat.findOneAndUpdate(
         { channel: channelId, user: userId },
         { userUnreadCount: 0 }
     )
