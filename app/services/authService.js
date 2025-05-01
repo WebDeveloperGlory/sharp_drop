@@ -98,11 +98,8 @@ exports.setSecurityPin = async ({ securityPin, userId }) => {
     foundUser.securityPin = securityPin;
     await foundUser.save();
 
-    // Generate jwt
-    const token = generateToken( foundUser );
-
     // Return success
-    return { success: true, message: 'Security Pin Set', data: { securityPin, token } };
+    return { success: true, message: 'Security Pin Set', data: securityPin };
 }
 
 exports.loginUser = async ({ email, number, password }) => {
