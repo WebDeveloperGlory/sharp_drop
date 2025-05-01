@@ -11,4 +11,5 @@ mongoose.connect( URI )
 module.exports.Channel = require('../models/Channel');
 module.exports.Chat = require('../models/Chat');
 module.exports.Message = require('../models/Message');
+module.exports.Order = require('../models/Order');
 module.exports.User = require('../models/User');
