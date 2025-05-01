@@ -16,7 +16,7 @@ exports.registerUser = async ({ firstName, lastName, email, number, password, re
         createdUser = new db.User({ firstName, lastName, email, number, password });
         if( !createdUser ) return { success: false, message: 'Error Creating User' };
         await createdUser.save();
-    } catch ( error) {
+    } catch ( err ) {
         console.error('User creation failed:', err);
         return { success: false, message: 'Error Creating User', error: err.message };
     }
