@@ -6,7 +6,7 @@ exports.adminGetAllOrders = async ( req, res ) => {
         const result = await orderService.adminGetAllOrders();
 
         if( result.success ) {
-            return success( res, result.message, result.data, 201 );
+            return success( res, result.message, result.data );
         }
         return error( res, result.message );    
     } catch ( err ) {
@@ -19,7 +19,7 @@ exports.confirmOrder = async ( req, res ) => {
         const result = await orderService.confirmOrder( req.params, req.body, req.user );
 
         if( result.success ) {
-            return success( res, result.message, result.data, 201 );
+            return success( res, result.message, result.data );
         }
         return error( res, result.message );    
     } catch ( err ) {
@@ -45,7 +45,7 @@ exports.userGetAllOrders = async ( req, res ) => {
         const result = await orderService.userGetAllOrders( req.user );
 
         if( result.success ) {
-            return success( res, result.message, result.data, 201 );
+            return success( res, result.message, result.data );
         }
         return error( res, result.message );    
     } catch ( err ) {
