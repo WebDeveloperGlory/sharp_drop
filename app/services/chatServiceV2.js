@@ -35,6 +35,10 @@ exports.userActiveChatClick = async ({ chatId }, { userId }) => {
     const foundChat = await db.Chat.findOne({ _id: chatId, user: userId })
         .populate([
             {
+                path: 'channel',
+                select: 'name color'
+            },
+            {
                 path: 'messages',
                 select: 'sender content media type',
                 populate: {
@@ -68,6 +72,10 @@ exports.userChannelClick = async ({ channelId }, { userId }) => {
     let chat;
     const existingChat = await db.Chat.findOne({ channel: channelId, user: userId })
         .populate([
+            {
+                path: 'channel',
+                select: 'name color'
+            },
             {
                 path: 'messages',
                 select: 'sender content media type',
@@ -122,6 +130,10 @@ exports.adminChatClick = async ({ chatId }) => {
     // Check if chat exists
     const foundChat = await db.Chat.findOne({ _id: chatId })
         .populate([
+            {
+                path: 'channel',
+                select: 'name color'
+            },
             {
                 path: 'messages',
                 select: 'sender content media type',
