@@ -1,9 +1,12 @@
 // STANDARD IMPORTS //
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
+const socketIO = require('socket.io');
 const swaggerUi = require('swagger-ui-express');
 const { swaggerSpecV1 } = require('./app/config/swagger');
 const { PORT, ALLOWED_ORIGINS } = require('./app/config/env');
+const { initializeSocketService } = require('./app/services/socketService');
 // END OF STANDARD IMPORTS //
 
 // ROUTE IMPORTS //
@@ -19,6 +22,7 @@ const orderRoutes = require('./app/routes/orderRoutes');
 // APP SETUP //
 const app = express();
 const APP_PORT = PORT;
+const server = http.createServer( app );
 // END OF APP SETUP //
 
 // CORS SETTINGS //
@@ -34,6 +38,23 @@ const corsOptions = {
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 };
 // END OF CORS SETTINGS //
+
+// SOCKET.IO SETUP //
+const io = socketIO(server, {
+    cors: {
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
+initializeSocketService( io );
+// END OF SOCKET.IO SETUP //
 
 // MIDDLEWARES //
 app.use( cors( corsOptions ) );
@@ -58,8 +79,9 @@ app.use('/api/order', orderRoutes);
 // END OF ROUTES //
 
 // SERVER STARTUP //
-app.listen( PORT, () => {
+server.listen( PORT, () => {
     console.log(`Sharp Drop Server Running On Port: ${ APP_PORT }`);
     console.log(`Swagger Docs Available At: ${ APP_PORT }/api/api-docs`);
+    console.log(`Socket.IO server is running and ready for connections`);
 });
 // END OF SERVER STARTUP //
