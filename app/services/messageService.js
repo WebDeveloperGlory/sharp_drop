@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const { uploadMedia } = require('./mediaProcessingService');
+const { getSocketService } = require('./socketService');
 
 exports.sendMessage = async ({ chatId, senderId, content, type = 'text' }, { role }) => {
     // Create message
@@ -11,6 +12,12 @@ exports.sendMessage = async ({ chatId, senderId, content, type = 'text' }, { rol
     })
     await message.save();
 
+    const populatedMessage = await db.Message.findById(message._id)
+        .populate({
+            path: 'sender',
+            select: 'firstName lastName email'
+        });
+
     // Update chat's last message and add to messages array
     await db.Chat.findByIdAndUpdate(chatId, {
         lastMessage: message._id,
@@ -21,14 +28,22 @@ exports.sendMessage = async ({ chatId, senderId, content, type = 'text' }, { rol
     });
 
     // Emit the message via Socket.IO
-    // this.socket.to(chatId.toString()).emit('new_message', message);
+    const socketService = getSocketService();
+    if (socketService) {
+        socketService.emitNewMessage(chatId, populatedMessage);
+    }
 
     return { success: true, message: 'Message Sent', data: message }
 }
 
 exports.markAsRead = async ({ chatId }, { userId }) => {
     await db.Chat.findByIdAndUpdate( chatId, { unreadCount: 0 } );
-    // this.socket.to(chatId.toString()).emit('messages_read', { chatId, userId });
+
+    // Emit via Socket.IO
+    const socketService = getSocketService();
+    if (socketService) {
+        socketService.emitMessagesRead(chatId, userId);
+    }
 
     // Return success
     return { success: true, message: 'Chat Marked As Read', data: null }
@@ -61,6 +76,12 @@ exports.sendVideoMessage = async ({ chatId, senderId, videoFile }, { role }) => 
     });
     await message.save();
 
+    const populatedMessage = await db.Message.findById(message._id)
+        .populate({
+            path: 'sender',
+            select: 'firstName lastName email'
+        });
+
     // Update chat
     await db.Chat.findByIdAndUpdate(chatId, {
         lastMessage: message._id,
@@ -71,7 +92,10 @@ exports.sendVideoMessage = async ({ chatId, senderId, videoFile }, { role }) => 
     });
 
     // Emit via Socket.IO
-    // this.socket.to(chatId.toString()).emit('new_message', message);
+    const socketService = getSocketService();
+    if (socketService) {
+        socketService.emitNewMessage(chatId, populatedMessage);
+    }
 
     // Return success
     return { success: true, message: 'Video Sent', data: message }
@@ -100,6 +124,12 @@ exports.sendImageMessage = async ({ chatId, senderId, imageFile }, { role }) => 
     });
     await message.save();
 
+    const populatedMessage = await db.Message.findById(message._id)
+        .populate({
+            path: 'sender',
+            select: 'firstName lastName email'
+        });
+
     // Update chat
     await db.Chat.findByIdAndUpdate(chatId, {
         lastMessage: message._id,
@@ -110,7 +140,10 @@ exports.sendImageMessage = async ({ chatId, senderId, imageFile }, { role }) => 
     });
 
     // Emit via Socket.IO
-    // this.socket.to(chatId.toString()).emit('new_message', message);
+    const socketService = getSocketService();
+    if (socketService) {
+        socketService.emitNewMessage(chatId, populatedMessage);
+    }
 
     // Return success
     return { success: true, message: 'Image Sent', data: message }

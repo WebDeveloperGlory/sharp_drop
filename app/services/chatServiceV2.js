@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { getSocketService } = require('./socketService');
 
 exports.userListActiveChats = async ({ userId }) => {
     // Check if user exists
@@ -54,6 +55,12 @@ exports.userActiveChatClick = async ({ chatId }, { userId }) => {
         chatId,
         { userUnreadCount: 0 }
     )
+
+    // Emit via Socket.IO that user has read messages
+    const socketService = getSocketService();
+    if (socketService) {
+        socketService.emitMessagesRead(chatId, userId);
+    }
 
     // Return success
     return { success: true, message: 'Chat Acquired', data: foundChat };
@@ -150,6 +157,12 @@ exports.adminChatClick = async ({ chatId }) => {
         chatId,
         { adminUnreadCount: 0 }
     )
+
+    // Emit via Socket.IO that admin has read messages
+    const socketService = getSocketService();
+    if (socketService) {
+        socketService.emitMessagesRead(chatId, 'admin');
+    }
 
     // Return success
     return { success: true, message: 'Chat Acquired', data: foundChat };
