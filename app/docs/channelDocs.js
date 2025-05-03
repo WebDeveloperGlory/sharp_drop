@@ -170,3 +170,67 @@
  *         scheme: bearer
  *         bearerFormat: JWT
  */
+
+/**
+ * @swagger
+ * /channel/{channelId}:
+ *   put:
+ *     tags: [Channels (Admin)]
+ *     summary: Update channel active status (Super Admin only)
+ *     description: Toggle a channel's active/inactive status
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: channelId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the channel to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - isActive
+ *             properties:
+ *               isActive:
+ *                 type: boolean
+ *                 description: Set channel active status
+ *                 example: false
+ *     responses:
+ *       200:
+ *         description: Channel status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "00"
+ *                 message:
+ *                   type: string
+ *                   example: "Channel status updated to inactive"
+ *                 data:
+ *                   $ref: '#/components/schemas/Channel'
+ *       400:
+ *         description: Invalid request body
+ *       401:
+ *         description: Unauthorized or insufficient permissions
+ *       404:
+ *         description: Channel not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "99"
+ *                 message:
+ *                   type: string
+ *                   example: "Channel not found"
+ */
