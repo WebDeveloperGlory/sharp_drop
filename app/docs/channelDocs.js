@@ -65,11 +65,18 @@
  * /channel:
  *   get:
  *     tags: [Channels (Public)]
- *     summary: Get all active channels
- *     description: Retrieve a list of all active channels
+ *     summary: Get all active or inactive channels
+ *     description: Retrieve a list of channels filtered by their active status. Defaults to active channels if not specified.
+ *     parameters:
+ *       - in: query
+ *         name: isActive
+ *         schema:
+ *           type: boolean
+ *         required: false
+ *         description: Filter channels by active status (true for active, false for inactive). Defaults to true.
  *     responses:
  *       200:
- *         description: List of active channels retrieved successfully
+ *         description: List of channels retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -80,7 +87,7 @@
  *                   example: "00"
  *                 message:
  *                   type: string
- *                   example: "All Active Channels Acquired"
+ *                   example: "All Active Channels Acquired or All Inactive Channels Acquired"
  *                 data:
  *                   type: array
  *                   items:
