@@ -1,12 +1,16 @@
 const db = require('../config/db');
 
-exports.getAllChannels = async () => {
+exports.getAllChannels = async ({ isActive = true } = {}) => {
     // Get all channels
-    const allChannels = await db.Channel.find({ isActive: true });
+    const allChannels = await db.Channel.find({ isActive });
 
     // Return success
-    return { success: true, message: 'All Active Channels Acquired', data: allChannels };
-}
+    return {
+        success: true,
+        message: `All ${isActive ? 'Active' : 'Inactive'} Channels Acquired`,
+        data: allChannels
+    };
+};
 
 exports.createChannel = async ({ name, color }, { userId }) => {
     // Check if channel exists
@@ -25,5 +29,27 @@ exports.createChannel = async ({ name, color }, { userId }) => {
     // Return success
     return { success: true, message: 'Channel Created', data: createdChannel };
 }
+
+exports.setChannelActiveStatus = async ({ channelId }, { isActive }) => {
+    // Check if channel exists
+    const channel = await db.Channel.findByIdAndUpdate(
+        channelId,
+        { isActive },
+        { new: true }
+    );
+    if (!channel) {
+        return {
+            success: false,
+            message: 'Channel not found'
+        };
+    }
+
+    // Return success
+    return {
+        success: true,
+        message: `Channel status updated to ${isActive ? 'active' : 'inactive'}`,
+        data: channel
+    };
+};
 
 module.exports = exports;
