@@ -3,7 +3,7 @@ const { success, error, serverError } = require('../utils/responseUtils');
 
 exports.getAllChannels = async ( req, res ) => {
     try {
-        const result = await channelService.getAllChannels();
+        const result = await channelService.getAllChannels( req.query );
 
         if( result.success ) {
             return success( res, result.message, result.data );
@@ -20,6 +20,19 @@ exports.createChannel = async ( req, res ) => {
 
         if( result.success ) {
             return success( res, result.message, result.data, 201 );
+        }
+        return error( res, result.message );    
+    } catch ( err ) {
+        return serverError( res, err );
+    }
+}
+
+exports.setChannelActiveStatus = async ( req, res ) => {
+    try {
+        const result = await channelService.setChannelActiveStatus( req.params, req.body );
+
+        if( result.success ) {
+            return success( res, result.message, result.data );
         }
         return error( res, result.message );    
     } catch ( err ) {
