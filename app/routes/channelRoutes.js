@@ -11,6 +11,7 @@ router.get( '/', controller.getAllChannels );
 
 // ADMIN ROUTES //
 router.post( '/', authenticateUser, hasSuperAdminPermissions, controller.createChannel );
+router.put( '/:channelId', authenticateUser, hasSuperAdminPermissions, controller.setChannelActiveStatus );
 // END OF ADMIN ROUTES //
 
 module.exports = router;
