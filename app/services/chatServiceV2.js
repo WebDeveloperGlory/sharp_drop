@@ -142,6 +142,14 @@ exports.adminChannelClick = async ({ channelId }) => {
                 }
             },
             {
+                path: 'messages',
+                select: 'sender content media type',
+                populate: {
+                    path: 'sender',
+                    select: 'firstName lastName email'
+                }
+            },
+            {
                 path: 'user',
                 select: 'firstName lastName email'
             },
