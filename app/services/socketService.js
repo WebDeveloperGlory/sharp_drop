@@ -136,6 +136,20 @@ class SocketService {
     }
 
     // ... (keep all the existing emit methods unchanged)
+    // Emit read status to a chat room
+     emitMessagesRead(chatId, userId) {
+         this.io.to(`chat:${chatId}`).emit('messages_read', { chatId, userId });
+     }
+   
+     // Notify user of new chat (e.g., when admin creates a chat)
+     notifyUserNewChat(userId, chat) {
+         this.io.to(`user:${userId}`).emit('new_chat', chat);
+     }
+     
+     // Notify all admins of new chat
+     notifyAdminsNewChat(chat) {
+         this.io.to('admins').emit('new_admin_chat', chat);
+     }
 }
 
 let socketService;
