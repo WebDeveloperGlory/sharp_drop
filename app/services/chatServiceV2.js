@@ -14,6 +14,10 @@ exports.userListActiveChats = async ({ userId }) => {
                 select: 'name color'
             },
             {
+                path: 'user',
+                select: 'firstName lastName email'
+            },
+            {
                 path: 'lastMessage',
                 select: 'sender content media type',
                 populate: {
@@ -38,6 +42,10 @@ exports.userActiveChatClick = async ({ chatId }, { userId }) => {
             {
                 path: 'channel',
                 select: 'name color'
+            },
+            {
+                path: 'user',
+                select: 'firstName lastName email'
             },
             {
                 path: 'messages',
@@ -84,6 +92,10 @@ exports.userChannelClick = async ({ channelId }, { userId }) => {
                 select: 'name color'
             },
             {
+                path: 'user',
+                select: 'firstName lastName email'
+            },
+            {
                 path: 'messages',
                 select: 'sender content media type',
                 populate: {
@@ -120,14 +132,20 @@ exports.adminChannelClick = async ({ channelId }) => {
 
     // Get all chats under the channel
     const allChats = await db.Chat.find({ channel: channelId })
-        .populate({
-            path: 'lastMessage',
-            select: 'sender content media type',
-            populate: {
-                path: 'sender',
+        .populate([
+            {
+                path: 'lastMessage',
+                select: 'sender content media type',
+                populate: {
+                    path: 'sender',
+                    select: 'firstName lastName email'
+                }
+            },
+            {
+                path: 'user',
                 select: 'firstName lastName email'
-            }
-        });
+            },
+        ]);
 
     // Return success
     return { success: true, message: 'All Channel Chats Acquired', data: allChats };
@@ -140,6 +158,10 @@ exports.adminChatClick = async ({ chatId }) => {
             {
                 path: 'channel',
                 select: 'name color'
+            },
+            {
+                path: 'user',
+                select: 'firstName lastName email'
             },
             {
                 path: 'messages',
