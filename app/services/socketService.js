@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const { verifyToken } = require('../utils/jwtUtils'); // Import your existing utility
+const { verifyToken } = require('../utils/jwtUtils');
 
 class SocketService {
     constructor(io) {
@@ -135,21 +135,37 @@ class SocketService {
         }
     }
 
-    // ... (keep all the existing emit methods unchanged)
+    /* ====================== */
+    /*  ORIGINAL EMIT METHODS */
+    /* ====================== */
+
+    // Emit new message to a chat room
+    emitNewMessage(chatId, message) {
+        this.io.to(`chat:${chatId}`).emit('new_message', message);
+
+        // Also notify admin channel if this chat belongs to a channel
+        if (message.chat && message.chat.channel) {
+            this.io.to(`channel:${message.chat.channel}`).emit('channel_new_message', {
+                chatId,
+                message
+            });
+        }
+    }
+
     // Emit read status to a chat room
-     emitMessagesRead(chatId, userId) {
-         this.io.to(`chat:${chatId}`).emit('messages_read', { chatId, userId });
-     }
-   
-     // Notify user of new chat (e.g., when admin creates a chat)
-     notifyUserNewChat(userId, chat) {
-         this.io.to(`user:${userId}`).emit('new_chat', chat);
-     }
-     
-     // Notify all admins of new chat
-     notifyAdminsNewChat(chat) {
-         this.io.to('admins').emit('new_admin_chat', chat);
-     }
+    emitMessagesRead(chatId, userId) {
+        this.io.to(`chat:${chatId}`).emit('messages_read', { chatId, userId });
+    }
+
+    // Notify user of new chat (e.g., when admin creates a chat)
+    notifyUserNewChat(userId, chat) {
+        this.io.to(`user:${userId}`).emit('new_chat', chat);
+    }
+
+    // Notify all admins of new chat
+    notifyAdminsNewChat(chat) {
+        this.io.to('admins').emit('new_admin_chat', chat);
+    }
 }
 
 let socketService;
