@@ -19,7 +19,7 @@ exports.userListActiveChats = async ({ userId }) => {
             },
             {
                 path: 'lastMessage',
-                select: 'sender content media type',
+                select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
                     select: 'firstName lastName email'
@@ -49,7 +49,7 @@ exports.userActiveChatClick = async ({ chatId }, { userId }) => {
             },
             {
                 path: 'messages',
-                select: 'sender content media type',
+                select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
                     select: 'firstName lastName email'
@@ -97,7 +97,7 @@ exports.userChannelClick = async ({ channelId }, { userId }) => {
             },
             {
                 path: 'messages',
-                select: 'sender content media type',
+                select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
                     select: 'firstName lastName email'
@@ -135,7 +135,7 @@ exports.adminChannelClick = async ({ channelId }) => {
         .populate([
             {
                 path: 'lastMessage',
-                select: 'sender content media type',
+                select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
                     select: 'firstName lastName email'
@@ -143,7 +143,7 @@ exports.adminChannelClick = async ({ channelId }) => {
             },
             {
                 path: 'messages',
-                select: 'sender content media type',
+                select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
                     select: 'firstName lastName email'
@@ -173,7 +173,7 @@ exports.adminChatClick = async ({ chatId }) => {
             },
             {
                 path: 'messages',
-                select: 'sender content media type',
+                select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
                     select: 'firstName lastName email'
