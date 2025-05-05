@@ -17,7 +17,7 @@ exports.sendTextMessage = async ( req, res ) => {
     }
 }
 
-exports.sendImageMessage = async ( req, res ) => {
+exports.sendImageMessage = async (req, res) => {
     const { chatId } = req.body;
     const senderId = req.user.userId;
 
@@ -28,18 +28,26 @@ exports.sendImageMessage = async ( req, res ) => {
 
         const result = await messageService.sendImageMessage({ 
             chatId, 
-            file: req.file, 
-            senderId 
+            filePath: req.file.path, // Now using file path instead of buffer
+            senderId,
+            mimetype: req.file.mimetype
         }, req.user);
+
+        // Clean up the temporary file
+        fs.unlinkSync(req.file.path);
 
         if (result.success) {
             return success(res, result.message, result.data, 201);
         }
         return error(res, result.message);    
     } catch (err) {
+        // Clean up if file exists
+        if (req.file?.path && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
         return serverError(res, err);
     }
-}
+};
 
 exports.sendVideoMessage = async ( req, res ) => {
     const { chatId, videoFile } = req.body;
