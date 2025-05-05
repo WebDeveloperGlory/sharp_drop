@@ -132,6 +132,7 @@ exports.adminChannelClick = async ({ channelId }) => {
 
     // Get all chats under the channel
     const allChats = await db.Chat.find({ channel: channelId })
+        .sort({ updatedAt: -1 })
         .populate([
             {
                 path: 'lastMessage',
