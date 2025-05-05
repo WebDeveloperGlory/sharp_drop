@@ -15,7 +15,7 @@ exports.userListActiveChats = async ({ userId }) => {
             },
             {
                 path: 'user',
-                select: 'firstName lastName email'
+                select: 'firstName lastName email role'
             },
             {
                 path: 'lastMessage',
@@ -45,14 +45,14 @@ exports.userActiveChatClick = async ({ chatId }, { userId }) => {
             },
             {
                 path: 'user',
-                select: 'firstName lastName email'
+                select: 'firstName lastName email role'
             },
             {
                 path: 'messages',
                 select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
-                    select: 'firstName lastName email'
+                    select: 'firstName lastName email role'
                 }
             }
         ]);
@@ -93,14 +93,14 @@ exports.userChannelClick = async ({ channelId }, { userId }) => {
             },
             {
                 path: 'user',
-                select: 'firstName lastName email'
+                select: 'firstName lastName email role'
             },
             {
                 path: 'messages',
                 select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
-                    select: 'firstName lastName email'
+                    select: 'firstName lastName email role'
                 }
             }
         ]);
@@ -139,7 +139,7 @@ exports.adminChannelClick = async ({ channelId }) => {
                 select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
-                    select: 'firstName lastName email'
+                    select: 'firstName lastName email role'
                 }
             },
             {
@@ -147,12 +147,12 @@ exports.adminChannelClick = async ({ channelId }) => {
                 select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
-                    select: 'firstName lastName email'
+                    select: 'firstName lastName email role'
                 }
             },
             {
                 path: 'user',
-                select: 'firstName lastName email'
+                select: 'firstName lastName email role'
             },
         ]);
 
@@ -170,14 +170,14 @@ exports.adminChatClick = async ({ chatId }) => {
             },
             {
                 path: 'user',
-                select: 'firstName lastName email'
+                select: 'firstName lastName email role'
             },
             {
                 path: 'messages',
                 select: 'sender content media type createdAt',
                 populate: {
                     path: 'sender',
-                    select: 'firstName lastName email'
+                    select: 'firstName lastName email role'
                 }
             }
         ]);
