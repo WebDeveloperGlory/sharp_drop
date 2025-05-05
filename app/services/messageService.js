@@ -24,8 +24,8 @@ exports.sendMessage = async ({ chatId, senderId, content, type = 'text' }, { rol
         $push: { messages: message._id },
         $inc: { 
             unreadCount: 1,
-            userUnreadCount: role === 'user' ? 1 : 0,
-            adminUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0
+            userUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0,
+            adminUnreadCount: role === 'user' ? 1 : 0
         }
     });
 
@@ -90,8 +90,8 @@ exports.sendVideoMessage = async ({ chatId, senderId, videoFile }, { role }) => 
         $push: { messages: message._id },
         $inc: { 
             unreadCount: 1,
-            userUnreadCount: role === 'user' ? 1 : 0,
-            adminUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0
+            userUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0,
+            adminUnreadCount: role === 'user' ? 1 : 0
         }
     });
 
@@ -105,7 +105,7 @@ exports.sendVideoMessage = async ({ chatId, senderId, videoFile }, { role }) => 
     return { success: true, message: 'Video Sent', data: message }
 }
 
-exports.sendImageMessage = async ({ chatId, senderId, imageFile }, { role }) => {
+exports.sendImageMessage = async ({ chatId, senderId, file }, { role }) => {
     // Upload to Cloudinary
     const mediaInfo = await uploadMedia(file.buffer, 'image', {
         folder: 'chat_images',
@@ -140,8 +140,8 @@ exports.sendImageMessage = async ({ chatId, senderId, imageFile }, { role }) => 
         $push: { messages: message._id },
         $inc: { 
             unreadCount: 1,
-            userUnreadCount: role === 'user' ? 1 : 0,
-            adminUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0
+            userUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0,
+            adminUnreadCount: role === 'user' ? 1 : 0
         }
     });
 
