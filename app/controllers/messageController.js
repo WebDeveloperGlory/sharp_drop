@@ -18,18 +18,26 @@ exports.sendTextMessage = async ( req, res ) => {
 }
 
 exports.sendImageMessage = async ( req, res ) => {
-    const { chatId, imageFile } = req.body;
+    const { chatId } = req.body;
     const senderId = req.user.userId;
 
     try {
-        const result = await messageService.sendImageMessage({ chatId, imageFile, senderId }, req.user );
-
-        if( result.success ) {
-            return success( res, result.message, result.data, 201 );
+        if (!req.file) {
+            return error(res, 'No file uploaded');
         }
-        return error( res, result.message );    
-    } catch ( err ) {
-        return serverError( res, err );
+
+        const result = await messageService.sendImageMessage({ 
+            chatId, 
+            file: req.file, 
+            senderId 
+        }, req.user);
+
+        if (result.success) {
+            return success(res, result.message, result.data, 201);
+        }
+        return error(res, result.message);    
+    } catch (err) {
+        return serverError(res, err);
     }
 }
 
