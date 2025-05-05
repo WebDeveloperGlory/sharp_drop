@@ -19,14 +19,19 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const filetypes = /jpeg|jpg|png|gif/;
+  const filetypes = /jpeg|jpg|png|gif|svg|heic|heif/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
 
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb(new Error('Only images (JPEG, JPG, PNG, GIF) are allowed!'), false);
+    // Improved error message
+    cb(new Error(
+      'Only these formats are allowed: ' +
+      'JPEG, JPG, PNG, GIF, SVG, HEIC, HEIF. ' +
+      'Your file: ' + file.originalname
+    ), false);
   }
 };
 
