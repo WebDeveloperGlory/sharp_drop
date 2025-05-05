@@ -105,52 +105,64 @@ exports.sendVideoMessage = async ({ chatId, senderId, videoFile }, { role }) => 
     return { success: true, message: 'Video Sent', data: message }
 }
 
-exports.sendImageMessage = async ({ chatId, senderId, file }, { role }) => {
-    // Upload to Cloudinary
-    const mediaInfo = await uploadMedia(file.buffer, 'image', {
-        folder: 'chat_images',
-        quality: 'auto',
-        fetch_format: 'auto'
-    });
+exports.sendImageMessage = async ({ chatId, senderId, filePath, mimetype }, { role }) => {
+    try {
+        // Determine resource type
+        const isVideo = mimetype.startsWith('video/');
+        const resourceType = isVideo ? 'video' : 'image';
+        const folder = isVideo ? 'chat_videos' : 'chat_images';
 
-    // Create message
-    const message = new db.Message({
-        chat: chatId,
-        sender: senderId,
-        type: 'image',
-        media: {
-            url: mediaInfo.url,
-            type: 'image',
-            size: mediaInfo.size,
-            width: mediaInfo.width,
-            height: mediaInfo.height
-        }
-    });
-    await message.save();
-
-    const populatedMessage = await db.Message.findById(message._id)
-        .populate({
-            path: 'sender',
-            select: 'firstName lastName email'
+        // Upload to Cloudinary
+        const mediaInfo = await uploadMedia(filePath, resourceType, {
+            folder,
+            quality: 'auto',
+            fetch_format: 'auto'
         });
 
-    // Update chat
-    await db.Chat.findByIdAndUpdate(chatId, {
-        lastMessage: message._id,
-        $push: { messages: message._id },
-        $inc: { 
-            unreadCount: 1,
-            userUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0,
-            adminUnreadCount: role === 'user' ? 1 : 0
+        // Create message
+        const message = new db.Message({
+            chat: chatId,
+            sender: senderId,
+            type: resourceType,
+            media: {
+                url: mediaInfo.url,
+                type: resourceType,
+                size: mediaInfo.size,
+                width: mediaInfo.width,
+                height: mediaInfo.height,
+                ...(isVideo && { duration: mediaInfo.duration })
+            }
+        });
+
+        await message.save();
+
+        const populatedMessage = await db.Message.findById(message._id)
+            .populate({
+                path: 'sender',
+                select: 'firstName lastName email'
+            });
+
+        // Update chat
+        await db.Chat.findByIdAndUpdate(chatId, {
+            lastMessage: message._id,
+            $push: { messages: message._id },
+            $inc: { 
+                unreadCount: 1,
+                userUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0,
+                adminUnreadCount: role === 'user' ? 1 : 0
+            }
+        });
+
+        // Emit via Socket.IO
+        const socketService = getSocketService();
+        if (socketService) {
+            socketService.emitNewMessage(chatId, populatedMessage);
         }
-    });
 
-    // Emit via Socket.IO
-    const socketService = getSocketService();
-    if (socketService) {
-        socketService.emitNewMessage(chatId, populatedMessage);
+        return { success: true, message: `${resourceType.charAt(0).toUpperCase() + resourceType.slice(1)} Sent`, data: message };
+    } catch (error) {
+        throw error;
     }
+};
 
-    return { success: true, message: 'Image Sent', data: message }
-}
 module.exports = exports;
