@@ -52,7 +52,7 @@ exports.getUserReferrals = async ({ userId }) => {
     if( !foundUser ) return { success: false, message: 'Invalid User' };
 
     // Get all user referrals
-    const referrals = await db.User.find({ referredBy: foundUser._id }).select('name email phone -_id');
+    const referrals = await db.User.find({ referredBy: foundUser._id }).select('firstName lastName email number -_id');
     const referralEmails = referrals.map( referral => referral.email );
 
     // Return success
