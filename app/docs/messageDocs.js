@@ -143,7 +143,7 @@
  *             properties:
  *               chatId:
  *                 type: string
- *               file:
+ *               imageFile:
  *                 type: string
  *                 format: binary
  *     responses:
@@ -187,7 +187,7 @@
  *             properties:
  *               chatId:
  *                 type: string
- *               file:
+ *               videoFile:
  *                 type: string
  *                 format: binary
  *     responses:
