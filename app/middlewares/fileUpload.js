@@ -26,11 +26,10 @@ const fileFilter = (req, file, cb) => {
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    // Improved error message
-    cb(new Error(
-      'Only these formats are allowed: ' +
-      'JPEG, JPG, PNG, GIF, SVG, HEIC, HEIF. ' +
-      'Your file: ' + file.originalname
+    const allowedTypes = ['JPEG', 'JPG', 'PNG', 'GIF', 'SVG', 'HEIC', 'HEIF'];
+    cb(Object.assign(
+      new Error(`Only ${allowedTypes.join(', ')} files are allowed`),
+      { code: 'LIMIT_FILE_TYPE' } // Custom error code
     ), false);
   }
 };
