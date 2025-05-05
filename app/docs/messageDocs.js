@@ -146,7 +146,7 @@
  *               imageFile:
  *                 type: string
  *                 format: binary
- *                 description: Supported formats - JPEG, JPG, PNG, GIF, MP4, MOV, AVI. Max size 50MB.
+ *                 description: Supported formats - JPEG, JPG, PNG, GIF, SVG, HEIC, HEIF. Max size 50MB.
  *     responses:
  *       201:
  *         description: Image message sent successfully
