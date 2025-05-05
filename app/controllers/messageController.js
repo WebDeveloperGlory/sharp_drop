@@ -18,8 +18,7 @@ exports.sendTextMessage = async ( req, res ) => {
 }
 
 exports.sendImageMessage = async ( req, res ) => {
-    const { chatId } = req.body;
-    const imageFile = req.file;
+    const { chatId, imageFile } = req.body;
     const senderId = req.user.userId;
 
     try {
@@ -35,8 +34,7 @@ exports.sendImageMessage = async ( req, res ) => {
 }
 
 exports.sendVideoMessage = async ( req, res ) => {
-    const { chatId } = req.body;
-    const videoFile = req.file;
+    const { chatId, videoFile } = req.body;
     const senderId = req.user.userId;
 
     try {
