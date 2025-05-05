@@ -22,9 +22,11 @@ exports.sendMessage = async ({ chatId, senderId, content, type = 'text' }, { rol
     await db.Chat.findByIdAndUpdate(chatId, {
         lastMessage: message._id,
         $push: { messages: message._id },
-        $inc: { unreadCount: 1 },
-        $inc: { userUnreadCount: role === 'user' ? 1 : 0 },
-        $inc: { adminUnreadCount: role === 'admin' || 'superAdmin' ? 1 : 0 },
+        $inc: { 
+            unreadCount: 1,
+            userUnreadCount: role === 'user' ? 1 : 0,
+            adminUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0
+        }
     });
 
     // Emit the message via Socket.IO
@@ -86,9 +88,11 @@ exports.sendVideoMessage = async ({ chatId, senderId, videoFile }, { role }) => 
     await db.Chat.findByIdAndUpdate(chatId, {
         lastMessage: message._id,
         $push: { messages: message._id },
-        $inc: { unreadCount: 1 },
-        $inc: { userUnreadCount: role === 'user' ? 1 : 0 },
-        $inc: { adminUnreadCount: role === 'admin' || 'superAdmin' ? 1 : 0 },
+        $inc: { 
+            unreadCount: 1,
+            userUnreadCount: role === 'user' ? 1 : 0,
+            adminUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0
+        }
     });
 
     // Emit via Socket.IO
@@ -103,7 +107,7 @@ exports.sendVideoMessage = async ({ chatId, senderId, videoFile }, { role }) => 
 
 exports.sendImageMessage = async ({ chatId, senderId, imageFile }, { role }) => {
     // Upload to Cloudinary
-    const mediaInfo = await uploadMedia(imageFile.path, 'image', {
+    const mediaInfo = await uploadMedia(file.buffer, 'image', {
         folder: 'chat_images',
         quality: 'auto',
         fetch_format: 'auto'
@@ -134,9 +138,11 @@ exports.sendImageMessage = async ({ chatId, senderId, imageFile }, { role }) => 
     await db.Chat.findByIdAndUpdate(chatId, {
         lastMessage: message._id,
         $push: { messages: message._id },
-        $inc: { unreadCount: 1 },
-        $inc: { userUnreadCount: role === 'user' ? 1 : 0 },
-        $inc: { adminUnreadCount: role === 'admin' || 'superAdmin' ? 1 : 0 },
+        $inc: { 
+            unreadCount: 1,
+            userUnreadCount: role === 'user' ? 1 : 0,
+            adminUnreadCount: role === 'admin' || role === 'superAdmin' ? 1 : 0
+        }
     });
 
     // Emit via Socket.IO
@@ -145,7 +151,6 @@ exports.sendImageMessage = async ({ chatId, senderId, imageFile }, { role }) => 
         socketService.emitNewMessage(chatId, populatedMessage);
     }
 
-    // Return success
     return { success: true, message: 'Image Sent', data: message }
 }
 module.exports = exports;
