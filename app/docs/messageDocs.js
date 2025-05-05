@@ -146,6 +146,7 @@
  *               imageFile:
  *                 type: string
  *                 format: binary
+ *                 description: Supported formats - JPEG, JPG, PNG, GIF, MP4, MOV, AVI. Max size 50MB.
  *     responses:
  *       201:
  *         description: Image message sent successfully
@@ -164,10 +165,23 @@
  *                   $ref: '#/components/schemas/Message'
  *       400:
  *         description: Invalid request or file
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "01"
+ *                 message:
+ *                   type: string
+ *                   example: "Only images (JPEG, JPG, PNG, GIF) and videos (MP4, MOV, AVI) are allowed"
  *       401:
  *         description: Unauthorized
  *       413:
- *         description: File too large
+ *         description: File too large (max 50MB)
+ *       500:
+ *         description: Internal server error
  */
 
 /**
