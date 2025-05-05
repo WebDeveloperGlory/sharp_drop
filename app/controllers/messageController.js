@@ -29,22 +29,37 @@ exports.sendImageMessage = async (req, res) => {
 
         const result = await messageService.sendImageMessage({ 
             chatId, 
-            filePath: req.file.path, // Now using file path instead of buffer
+            filePath: req.file.path,
             senderId,
             mimetype: req.file.mimetype
         }, req.user);
 
-        // Clean up the temporary file
-        fs.unlinkSync(req.file.path);
+        // Safe file cleanup
+        if (req.file.path) {
+            try {
+                if (fs.existsSync(req.file.path)) {
+                    fs.unlinkSync(req.file.path);
+                }
+            } catch (cleanupErr) {
+                console.error('File cleanup error:', cleanupErr);
+                // Don't fail the request just because cleanup failed
+            }
+        }
 
         if (result.success) {
             return success(res, result.message, result.data, 201);
         }
-        return error(res, result.message);    
+        return error(res, result.message);
     } catch (err) {
-        // Clean up if file exists
-        if (req.file?.path && fs.existsSync(req.file.path)) {
-            fs.unlinkSync(req.file.path);
+        // Attempt cleanup if error occurred before service
+        if (req.file?.path) {
+            try {
+                if (fs.existsSync(req.file.path)) {
+                    fs.unlinkSync(req.file.path);
+                }
+            } catch (cleanupErr) {
+                console.error('Error cleanup error:', cleanupErr);
+            }
         }
         return serverError(res, err);
     }
