@@ -1,3 +1,4 @@
+const multer = require('multer');
 const { error } = require('../utils/responseUtils');
 
 const uploadErrorHandler = (err, req, res, next) => {
