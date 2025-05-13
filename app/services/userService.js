@@ -59,4 +59,37 @@ exports.getUserReferrals = async ({ userId }) => {
     return { success: true, message: 'All Referrals Acquired', data: referrals };
 }
 
+exports.deleteUser = async ({ userId }) => {
+    // Check if user exists
+    const userToDelete = await db.User.findById(userId);
+    if (!userToDelete) {
+        return { success: false, message: 'Invalid User' };
+    }
+
+    // Perform deletion
+    await db.User.findByIdAndDelete(userId);
+
+    // Return success
+    return { success: true, message: 'User deleted successfully' };
+};
+
+exports.deleteSelf = async ({ userId }) => {
+    try {
+        // Check if user exists
+        const userToDelete = await db.User.findById(userId);
+        if (!userToDelete) {
+            return { success: false, message: 'Invalid User' };
+        }
+
+        // Perform deletion
+        await db.User.findByIdAndDelete(userId);
+
+        // Return success
+        return { success: true, message: 'Account deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting account:', error);
+        return { success: false, message: 'Error deleting account', error: error.message };
+    }
+};
+
 module.exports = exports;
