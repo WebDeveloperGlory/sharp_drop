@@ -53,4 +53,30 @@ exports.getUserReferrals = async ( req, res ) => {
     }
 }
 
+exports.deleteUser = async ( req, res ) => {
+    try {
+        const result = await userService.deleteUser( req.params );
+
+        if( result.success ) {
+            return success( res, result.message, result.data );
+        }
+        return error( res, result.message );    
+    } catch ( err ) {
+        return serverError( res, err );
+    }
+}
+
+exports.deleteSelf = async ( req, res ) => {
+    try {
+        const result = await userService.deleteSelf( req.user );
+
+        if( result.success ) {
+            return success( res, result.message, result.data );
+        }
+        return error( res, result.message );    
+    } catch ( err ) {
+        return serverError( res, err );
+    }
+}
+
 module.exports = exports;
