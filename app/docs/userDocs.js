@@ -232,6 +232,112 @@
 
 /**
  * @swagger
+ * /user/profile/delete:
+ *   delete:
+ *     tags: [User]
+ *     summary: Delete own user account
+ *     description: Allows a user to permanently delete their own account
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Account deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "00"
+ *                 message:
+ *                   type: string
+ *                   example: "Account deleted successfully"
+ *                 data:
+ *                   type: null
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "99"
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid User"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "99"
+ *                 message:
+ *                   type: string
+ *                   example: "Error deleting account"
+ */
+
+/**
+ * @swagger
+ * /user/profile/delete/{userId}:
+ *   delete:
+ *     tags: [User]
+ *     summary: Delete a user account (Admin only)
+ *     description: Allows admins to delete user accounts (requires admin permissions)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user to delete
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "00"
+ *                 message:
+ *                   type: string
+ *                   example: "User deleted successfully"
+ *                 data:
+ *                   type: null
+ *       401:
+ *         description: Unauthorized or insufficient permissions
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: "99"
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid User"
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
  * components:
  *   securitySchemes:
  *     bearerAuth:
