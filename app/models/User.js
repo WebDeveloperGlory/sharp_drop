@@ -21,6 +21,14 @@ const userSchema = new Schema({
     deactivationReason: { type: String },
     deactivationStatus: { type: String, enum: ['unapproved', 'approved' ] },
     lastSeen: { type: Date, default: Date.now },
+    deviceTokens: [{
+        token: { type: String },
+        platform: {
+            type: String,
+            enum: ['web', 'android', 'ios']
+        },
+        createdAt: Date
+    }],
 }, {
     timestamps: true
 });
