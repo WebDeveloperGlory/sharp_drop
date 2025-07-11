@@ -17,6 +17,9 @@ const userSchema = new Schema({
     referralCode: { type: String, unique: true, default: null },
     referredBy: { type: Schema.Types.ObjectId, ref: 'User' },
     isOnline: { type: Boolean, default: false },
+    isDeactivated: { type: Boolean, default: false },
+    deactivationReason: { type: String },
+    deactivationStatus: { type: String, enum: ['unapproved', 'approved' ] },
     lastSeen: { type: Date, default: Date.now },
 }, {
     timestamps: true
