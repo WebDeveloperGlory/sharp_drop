@@ -12,6 +12,8 @@ router.delete( '/profile/delete/:userId', authenticateUser, hasAdminPermissions,
 router.get( '/referrals/personal', authenticateUser, controller.getUserReferrals );
 router.post( '/referrals/generate', authenticateUser, controller.generateReferralCode );
 router.post( '/referrals/validate/:referralCode', controller.validateReferralCode );
+router.put( '/profile/device-token', authenticateUser, controller.updateDeviceTokens );
+router.put( '/profile/deactivate', authenticateUser, controller.requestAccountDeactivation );
 // END OF GENERAL ROUTES //
 
 module.exports = router;

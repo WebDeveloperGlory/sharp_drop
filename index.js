@@ -17,6 +17,7 @@ const messageRoutes = require('./app/routes/messageRoutes');
 const chatRoutes = require('./app/routes/chatRoutes');
 const chatRoutesV2 = require('./app/routes/chatRoutesV2');
 const orderRoutes = require('./app/routes/orderRoutes');
+const notificationRoutes = require('./app/routes/notificationRoutes');
 // END OF ROUTE IMPORTS //
 
 // APP SETUP //
@@ -116,6 +117,7 @@ app.use('/api/message', messageRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/chat/v2', chatRoutesV2);
 app.use('/api/order', orderRoutes);
+app.use('/api/notification', notificationRoutes);
 // END OF ROUTES //
 
 // SERVER STARTUP //

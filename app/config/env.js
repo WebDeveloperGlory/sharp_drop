@@ -10,4 +10,7 @@ module.exports = {
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     SOCKET_URL: process.env.SOCKET_URL,
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASS: process.env.EMAIL_PASS,
+    OWNER_EMAIL: process.env.OWNER_EMAIL,
 }

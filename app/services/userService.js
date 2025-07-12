@@ -92,4 +92,57 @@ exports.deleteSelf = async ({ userId }) => {
     }
 };
 
+exports.updateDeviceTokens = async ({ deviceToken, platform }, { userId }) => {
+    try {
+        // Find user
+        const foundUser = await db.User.findById( userId );
+        if( !foundUser ) return { success: false, message: 'Invalid User' };
+
+        // Check if token exists
+        const tokenExists = foundUser.deviceTokens.some(t => t.token === deviceToken);
+    
+        if (!tokenExists) {
+            foundUser.deviceTokens.push({
+                token: deviceToken,
+                platform: platform || 'web',
+                createdAt: new Date(),
+            });            
+            await foundUser.save();
+        }
+
+        // Return success
+        return { success: true, message: 'Token Added', data: foundUser.deviceTokens }
+    } catch (error) {
+        console.error('Device token udate error:', error);
+        return { 
+            success: false, 
+            message: error.message || 'Failed to update device token'
+        };
+    }
+}
+
+exports.requestAccountDeactivation = async ({ reason }, { userId }) => {
+    try {
+        // Find user
+        const foundUser = await db.User.findById( userId );
+        if( !foundUser ) return { success: false, message: 'Invalid User' };
+
+        // Request deactivation
+        foundUser.deactivationReason = reason;
+        foundUser.deactivationStatus = 'unapproved';
+        await foundUser.save();
+
+        // Send deativation mail to admin
+
+        // Return success
+        return { success: true, message: 'Token Added', data: foundUser.deviceTokens }
+    } catch (error) {
+        console.error('Deactivation request error:', error);
+        return { 
+            success: false, 
+            message: error.message || 'Failed Deactivation Request'
+        };
+    }
+}
+
 module.exports = exports;

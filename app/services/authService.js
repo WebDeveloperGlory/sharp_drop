@@ -8,6 +8,7 @@ exports.registerUser = async ({ firstName, lastName, email, number, password, re
     
     // Check if user exists
     const foundUser = await db.User.findOne({ email });
+    if( foundUser && foundUser.isDeactivated ) return { success: false, message: 'You Have Deactivated This Account' }
     if( foundUser ) return { success: false, message: 'User With Email Already Exists' }
 
     // Create user
@@ -110,7 +111,7 @@ exports.loginUser = async ({ email, number, password }) => {
             { number }
         ]
     });
-    if( !foundUser ) return { success: false, message: 'Invalid Email/Number' };
+    if( !foundUser || foundUser.isDeactivated ) return { success: false, message: 'Invalid Email/Number' };
     if( foundUser.role !== 'user' ) return { success: false, message: 'Invalid User' }
 
     // Check if password is coreect
@@ -136,7 +137,7 @@ exports.loginAdmin = async ({ email, number, password }) => {
             { number }
         ]
     });
-    if( !foundUser ) return { success: false, message: 'Invalid Email/Number' };
+    if( !foundUser || foundUser.isDeactivated ) return { success: false, message: 'Invalid Email/Number' };
     if( foundUser.role === 'user' ) return { success: false, message: 'Invalid Admin' }
 
     // Check if password is coreect

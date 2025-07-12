@@ -79,4 +79,26 @@ exports.deleteSelf = async ( req, res ) => {
     }
 }
 
+exports.updateDeviceTokens = async ( req, res ) => {
+    try {
+        const result = await userService.updateDeviceTokens( req.body, req.user );
+        if( result.success ) return success( res, result.message, result.data );
+
+        return error( res, result.message );
+    } catch ( err ) {
+        return serverError( res, err );
+    }
+}
+
+exports.requestAccountDeactivation = async ( req, res ) => {
+    try {
+        const result = await userService.requestAccountDeactivation( req.body, req.user );
+        if( result.success ) return success( res, result.message, result.data );
+
+        return error( res, result.message );
+    } catch ( err ) {
+        return serverError( res, err );
+    }
+}
+
 module.exports = exports;
